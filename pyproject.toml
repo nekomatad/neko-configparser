@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "neko-configparser"
+version = "0.1.0"
+description = ""
+authors = ["hhh"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+toml = "^0.10.2"
+
+[tool.poetry.group.dev.dependencies]
+rich = "^13.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
