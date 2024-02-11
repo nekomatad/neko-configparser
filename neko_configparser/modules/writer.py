@@ -1,5 +1,6 @@
 import toml
 from typing import Dict, Any
+from collections import UserDict
 
 
 def _update_dicts(dict1, dict2):
@@ -7,13 +8,15 @@ def _update_dicts(dict1, dict2):
     Ensures that dict1 exists in dict2 or merges them in right way
     """
     for key in dict1:
-        if key not in dict2 and not isinstance(dict1[key], WriteTomlConfig):
+        if (key not in dict2) and not isinstance(dict1[key], dict):
             dict2[key] = dict1[key]
-        elif isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
+        elif key not in dict2:
+            dict2[key] = {}
+        elif isinstance(dict1[key], dict) and isinstance(dict2[key], WriteTomlConfig):
             _update_dicts(dict1[key], dict2[key])
 
 
-class WriteTomlConfig(dict):
+class WriteTomlConfig(UserDict):
     def __init__(self, filename: str = 'config.neko.toml'):
         self.__filename = filename
         self.__parent = None
@@ -28,6 +31,8 @@ class WriteTomlConfig(dict):
         for key, value in data.items():
             if isinstance(value, dict):
                 d[key] = cls.__create_subsidiary(value, parent=parent)
+            else:
+                d.data[key] = value
 
         return d
 
